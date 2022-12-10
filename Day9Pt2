@@ -1,8 +1,5 @@
 with open("Day9input.txt", "r") as file:
     instructions = [item.split(" ") for item in file.read().split("\n")]
-# with open("day9test.txt", "r") as file:
-#     instructions = [item.split(" ") for item in file.read().split("\n")]
-import pdb
 head=[]
 tail= []
 positions = []
@@ -19,17 +16,12 @@ def part_one_setup():
     return print(f"Part one: {len(set(tuple(item) for item in positions))}")
 
 def part_two_setup():
-    # pdb.set_trace()
     global head,tail,positions
     head = [0,0]
     tails = [[0,0] for item in range(0,9)]
     positions = []
     should_debug=False
     for num,item in enumerate(instructions):
-        # print(num)
-        # if num == 64:
-            # should_debug=True
-            # pdb.set_trace()
         for command in range(0,int(item[1])):
             move_part_two(tails,item[0],should_debug)
             tail_copy = tails[-1].copy()
@@ -37,7 +29,6 @@ def part_two_setup():
     return print(f"Part two: {len(set(tuple(item) for item in positions))}")
     
 def move(direction):
-    # pdb.set_trace()
     if direction == "U":
         head[1] += 1
     elif direction =="D":
@@ -46,8 +37,8 @@ def move(direction):
         head[0] += 1
     else:
         head[0] -= 1
-    positive_rc_conditions = [head[0]-tail[0] > 1, head[1] - tail[1] > 1] #positive
-    negative_rc_conditions = [head[0]-tail[0] < -1, head[1] - tail[1] < -1]   #
+    positive_rc_conditions = [head[0]-tail[0] > 1, head[1] - tail[1] > 1] 
+    negative_rc_conditions = [head[0]-tail[0] < -1, head[1] - tail[1] < -1] 
     positive_diag_conditions = [head[0] - tail[0] ]
 
     if head[0] == tail[0] or head[1] == tail[1]:
@@ -70,7 +61,6 @@ def move(direction):
                 tail[negative_rc_conditions.index(False)] += 1
 
 def move_part_two(tails,direction,should_debug):
-    # pdb.set_trace()
     if should_debug:
         pdb.set_trace()
     if direction == "U":
@@ -82,7 +72,6 @@ def move_part_two(tails,direction,should_debug):
     else:
         head[0] -= 1
     for count,tail in enumerate(tails):
-        # print(count)
         if count == 0:
             positive_rc_conditions = [head[0]-tail[0] > 1, head[1] - tail[1] > 1] #positive
             negative_rc_conditions = [head[0]-tail[0] < -1, head[1] - tail[1] < -1]   #
@@ -101,7 +90,7 @@ def move_part_two(tails,direction,should_debug):
                         tail[positive_rc_conditions.index(False)] += 1
                     else:
                         tail[positive_rc_conditions.index(False)] -= 1
-                if all(negative_rc_conditions):
+                elif all(negative_rc_conditions): #here
                     tail[0] -= 1
                     tail[1] -= 1
                 elif any(negative_rc_conditions):
@@ -111,8 +100,8 @@ def move_part_two(tails,direction,should_debug):
                     else:
                         tail[negative_rc_conditions.index(False)] += 1
         else:
-            positive_rc_conditions = [tails[count-1][0]-tail[0] > 1, tails[count-1][1] - tail[1] > 1] #positive
-            negative_rc_conditions = [tails[count-1][0]-tail[0] < -1, tails[count-1][1] - tail[1] < -1]   #
+            positive_rc_conditions = [tails[count-1][0]-tail[0] > 1, tails[count-1][1] - tail[1] > 1] 
+            negative_rc_conditions = [tails[count-1][0]-tail[0] < -1, tails[count-1][1] - tail[1] < -1]   
             if tails[count-1][0] == tail[0] or tails[count-1][1] == tail[1]:
                 if any(positive_rc_conditions):
                     tail[positive_rc_conditions.index(True)] += 1
@@ -128,7 +117,7 @@ def move_part_two(tails,direction,should_debug):
                         tail[positive_rc_conditions.index(False)] += 1
                     else:
                         tail[positive_rc_conditions.index(False)] -= 1
-                if all(negative_rc_conditions):
+                elif all(negative_rc_conditions): #here
                     tail[0] -= 1
                     tail[1] -= 1
                 elif any(negative_rc_conditions):
