@@ -1,0 +1,70 @@
+import math
+
+with open("Day11input.txt", "r") as file:
+    monkey_list = [item.split("\n") for item in file.read().split("\n\n")]
+
+# with open("day11test.txt", "r") as file:
+#     monkey_list = [item.split("\n") for item in file.read().split("\n\n")]
+
+monkeys = {}
+iteration=0
+
+for item in monkey_list:
+    dict_key = item[0][:-1]
+    monkeys[dict_key] = {}
+    monkeys[dict_key]["Items"]= [int(item) for item in item[1][item[1].index(": ")+1:].split(",")]
+    monkeys[dict_key]["Operation"] = item[2][item[2].index("=")+2:].split(" ")
+    monkeys[dict_key]['Test'] = f"/ {item[3].split(' ')[3]}".split(" ")
+    monkeys[dict_key]['True'] = int(item[4][-1])
+    monkeys[dict_key]['False'] = int(item[5][-1])
+    monkeys[dict_key]['NumberOfInspections'] = 0
+
+while iteration < 20:
+    # pdb.set_trace()
+    for monkey in monkeys:
+        print(monkey)
+        operations = monkeys[monkey]['Operation']
+        test = monkeys[monkey]['Test']
+        items_copy = monkeys[monkey]['Items'].copy()
+        for count, item in enumerate(monkeys[monkey]['Items']):
+            # pdb.set_trace()
+            item = int(item)
+            # pdb.set_trace()
+            if operations[2] == "old":
+                if operations[1] == "*":
+                    new_worry = item * item
+                elif operations[1] == "+":
+                    new_worry = item + item
+                elif operations[1] == "/":
+                    new_worry = item / item
+                else:
+                    new_worry = item - item
+            else:
+                if operations[1] == "*":
+                    new_worry = item * int(operations[2])
+                elif operations[1] == "+":
+                    new_worry = item + int(operations[2])
+                elif operations[1] == "/":
+                    new_worry = item / int(operations[2])
+                else:
+                    new_worry = item - int(operations[2])
+            new_worry = math.floor(new_worry/3)
+            if test[0] == "/":
+                if new_worry % int(test[1]) == 0:
+                    monkeys[f'Monkey {monkeys[monkey]["True"]}']['Items'].append(new_worry)
+                    items_copy.pop(0)
+                else:
+                    monkeys[f'Monkey {monkeys[monkey]["False"]}']['Items'].append(new_worry)
+                    items_copy.pop(0)
+
+        monkeys[monkey]['Items'] = items_copy
+        monkeys[monkey]['NumberOfInspections'] += count+1
+    iteration+=1
+print(monkeys)
+monkey_business = []
+for item in monkeys:
+    monkey_business.append(monkeys[item]['NumberOfInspections'])
+
+monkey_business=(sorted(monkey_business,reverse=True))
+
+print(monkey_business[0]*monkey_business[1])
