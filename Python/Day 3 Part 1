@@ -1,0 +1,18 @@
+with open('Day3input.txt', 'r') as file:
+    rucksack = file.read().split("\n")
+sum_of_items = 0
+import string
+score_list = list(zip(string.ascii_lowercase + string.ascii_uppercase,range(1,53)))
+letter_values = dict((a,b) for a,b in score_list)
+
+for item in rucksack:
+    split = int(len(item)/2)
+    compartment_one = item[0:split]
+    compartment_two = item[split:len(item)]
+    for letter in compartment_one:
+        if letter in compartment_two:
+            duplicate_property_value = letter_values[letter]
+            sum_of_items += duplicate_property_value
+            break
+print(sum_of_items)
+print(len(rucksack))
