@@ -1,0 +1,20 @@
+import re
+finallist = []
+uberlist = []
+puzzle = puzzle.replace("\n", "")
+elf_list = re.split(r"(,,)", puzzle)
+for item in elf_list:
+    if item != ",,":
+        newlist = item.split(",")
+        finallist.append(newlist)
+
+for item in finallist:
+    for count, num in enumerate(item):
+        item[count] = int(num)
+    calories = sum(item)
+    uberlist.append(calories)
+
+uberlist.sort(reverse=True)
+print(uberlist[0])
+
+print(uberlist[0]+uberlist[1]+uberlist[2])
